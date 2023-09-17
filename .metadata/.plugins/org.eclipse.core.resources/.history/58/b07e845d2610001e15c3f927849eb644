@@ -1,0 +1,125 @@
+package com.tesji.view;
+
+import java.awt.EventQueue;
+
+import javax.swing.ImageIcon;
+import javax.swing.JFrame;
+import javax.swing.JPanel;
+import javax.swing.border.EmptyBorder;
+
+import com.tesji.model.ConectionAr;
+import com.tesji.model.ConectionDB;
+
+import java.awt.BorderLayout;
+import javax.swing.JTextArea;
+import javax.swing.JTextField;
+import javax.swing.JLabel;
+import java.awt.Color;
+
+public class Revisar extends JFrame {
+
+	private JPanel contentPane;
+	private static JTextField txtID;
+	private static JTextField txtNombre;
+	private JTextField txtMatricula;
+	private static JTextField txtEdad;
+	private JLabel txtImagen;
+
+	/**
+	 * Launch the application.
+	 */
+	
+	public static void main(String[] args) {
+		EventQueue.invokeLater(new Runnable() {
+			public void run() {
+				try {
+					Revisar frame = new Revisar();
+					frame.setVisible(true);
+					
+					ConectionAr con =  new ConectionAr();
+							//MANDAR VALORES A IMPRIMIR
+							con.Puertos(txtID);
+							
+					
+					
+				} catch (Exception e) {
+					e.printStackTrace();
+				}
+			}
+		});
+	}
+
+	public JLabel getTxtImagen() {
+		return txtImagen;
+	}
+
+	public void setTxtImagen(JLabel txtImagen) {
+		this.txtImagen = txtImagen;
+	}
+
+	/**
+	 * Create the frame.
+	 */
+	public Revisar() {
+		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		setBounds(100, 100, 364, 666);
+		contentPane = new JPanel();
+		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
+
+		setContentPane(contentPane);
+		contentPane.setLayout(null);
+		
+		JTextArea txtrUid = new JTextArea();
+		txtrUid.setEditable(false);
+		txtrUid.setText("UID");
+		txtrUid.setBounds(52, 275, 88, 26);
+		contentPane.add(txtrUid);
+		
+		txtID = new JTextField();
+		txtID.setEditable(false);
+		txtID.setBounds(166, 273, 125, 28);
+		contentPane.add(txtID);
+		txtID.setColumns(10);
+		
+		JTextArea txtrNombre = new JTextArea();
+		txtrNombre.setEditable(false);
+		txtrNombre.setText("Nombre");
+		txtrNombre.setBounds(52, 325, 88, 26);
+		contentPane.add(txtrNombre);
+		
+		txtNombre = new JTextField();
+		txtNombre.setEditable(false);
+		txtNombre.setColumns(10);
+		txtNombre.setBounds(166, 323, 125, 28);
+		contentPane.add(txtNombre);
+		
+		JTextArea txtrUid_1_1 = new JTextArea();
+		txtrUid_1_1.setEditable(false);
+		txtrUid_1_1.setText("Matricula");
+		txtrUid_1_1.setBounds(52, 385, 88, 26);
+		contentPane.add(txtrUid_1_1);
+		
+		txtMatricula = new JTextField();
+		txtMatricula.setEditable(false);
+		txtMatricula.setColumns(10);
+		txtMatricula.setBounds(166, 383, 125, 28);
+		contentPane.add(txtMatricula);
+		
+		JTextArea txtrUid_1_2 = new JTextArea();
+		txtrUid_1_2.setEditable(false);
+		txtrUid_1_2.setText("Edad");
+		txtrUid_1_2.setBounds(52, 448, 88, 26);
+		contentPane.add(txtrUid_1_2);
+		
+		txtEdad = new JTextField();
+		txtEdad.setEditable(false);
+		txtEdad.setColumns(10);
+		txtEdad.setBounds(166, 446, 125, 28);
+		contentPane.add(txtEdad);
+		
+		txtImagen = new JLabel();
+		txtImagen.setBackground(new Color(255, 255, 255));
+		txtImagen.setBounds(70, 41, 204, 200);
+		contentPane.add(txtImagen);
+	}
+}

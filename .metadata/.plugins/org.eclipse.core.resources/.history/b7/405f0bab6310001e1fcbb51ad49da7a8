@@ -1,0 +1,187 @@
+package com.tesji.model;
+
+import java.awt.Image;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.IOException;
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+
+import javax.swing.ImageIcon;
+import javax.swing.JFrame;
+import javax.swing.JLabel;
+import javax.swing.JOptionPane;
+import javax.swing.JTextField;
+
+import com.tesji.view.Registrar;
+import com.tesji.view.Revisar;
+
+import jssc.SerialPort;
+import jssc.SerialPortEvent;
+import jssc.SerialPortEventListener;
+import jssc.SerialPortException;
+import jssc.SerialPortList;
+
+public class ConectionDB {
+	Manager man;
+	public static String uidDevuelto;
+	private ImageIcon imageFinal;
+	String ruta;
+	int ele;
+
+	public void Puertos(JTextField id, JTextField nom, JTextField mat, JTextField edad, JLabel label) throws SerialPortException {
+		String puertos []= SerialPortList.getPortNames();
+		for(String n: puertos) {
+			System.out.println(n);
+		}
+		SerialPort sp = new SerialPort("/dev/ttyACM0");
+		
+		try {
+			sp.openPort();
+			sp.addEventListener(new LecturaSerial(sp, id, nom, mat, edad, label),SerialPort.MASK_RXCHAR);
+			
+		}catch(Exception ex) {
+			ex.printStackTrace();
+			
+		}
+	}
+	
+	//Metodos de conexion a la base de datos
+	public void Elejir(int elejir, String dato, JTextField id, JTextField nom, JTextField mat, JTextField edad, JLabel label) throws SQLException {
+		man= new Manager();
+		Connection conection=
+				DriverManager.getConnection("jdbc:mysql://localhost:3306/alumno","root","SusSand#12");
+		switch(elejir) {
+		case 1:
+			//CONSULTAR TODOS LOS DATOS
+			PreparedStatement prepared = 
+			conection.prepareStatement("SELECT * FROM "+man.tabla+" WHERE "+man.uid+"=?");
+			prepared.setString(1, dato);
+			ResultSet result = prepared.executeQuery();
+			while(result.next()) {
+				uidDevuelto = result.getString("uid");
+				String nome = result.getString("nombre");
+				String matricula = result.getString("Matricula");
+				String eda = result.getString("Edad");
+				if(uidDevuelto.length()==0) {
+					id.setText(dato);
+					nom.setText("NO HAY REGISTROS");
+					mat.setText("NO HAY REGISTROS");
+					edad.setText("NO HAY REGISTROS");
+				}else {
+				
+				id.setText(uidDevuelto);
+				nom.setText(nome);
+				mat.setText(matricula);
+				edad.setText(eda);
+				JOptionPane.showMessageDialog(null, "uid:"+uidDevuelto+" nombre: "+nome);}
+			}
+			//IMG
+			PreparedStatement prepared6 = 
+					conection.prepareStatement("SELECT imagen FROM "+man.tabla+" where "+man.uid+"=?");
+					prepared6.setString(1, dato);
+					
+					try (ResultSet rs = prepared6.executeQuery()) {
+		                if (rs.next()) {
+		                    byte[] imagenBytes1 = rs.getBytes("imagen");
+
+		                    // Convertir los datos binarios en un ImageIcon
+		                    ImageIcon imageIcon = new ImageIcon(imagenBytes1);
+		                    Image imagen = imageIcon.getImage();
+		                    Image imagenEscalada = imagen.getScaledInstance(200, 200, Image.SCALE_SMOOTH);
+		                    imageFinal = new ImageIcon(imagenEscalada);
+		                 // Crear un JLabel y asignar la imagen
+		                    label.setIcon(imageFinal);
+		                }
+		            }
+			//IMG FIN
+			break;
+		case 2:
+			//AGREGAR
+			System.out.println();
+			File imagenFile = new File(ruta);
+			byte[] imagenBytes = new byte[(int) imagenFile.length()];
+
+			try (FileInputStream fis = new FileInputStream(imagenFile)) {
+			    fis.read(imagenBytes);
+			} catch (IOException e) {
+			    e.printStackTrace();
+			}
+			PreparedStatement prepared2 = 
+			conection.prepareStatement("insert into alumno values(?,?,?,?,?)");
+			//Para AGREGAR DATOS
+			id.setText(dato);
+			System.out.println(dato);
+			prepared2.setNString(1, dato);
+			prepared2.setNString(2, nom.getText());
+			prepared2.setBytes(3, imagenBytes);
+			prepared2.setNString(4, mat.getText());
+			prepared2.setNString(5, edad.getText());
+			prepared2.executeUpdate();
+			break;
+		case 3:
+			//ACTUALIZAR
+			break;
+		case 4:
+			//ELIMINAR
+			break;
+		}
+	}
+	public void Prueba(String r) { //LLAMAR EN EL FILE CHOOSER PARA PASAR LA RUTA
+		ruta=r;
+	}
+	public void Eleccion(int e) { //LLAMAR PARA PASAR LA ELECCIOON
+		ele=e;
+		LecturaSerial z = new LecturaSerial();
+		z.elej(ele);
+	}
+}
+
+class LecturaSerial implements SerialPortEventListener{
+	SerialPort sp;
+	String msg;
+	JTextField id, nom, mat, edad;JLabel label;
+	int n;
+	public LecturaSerial(SerialPort sp, JTextField id, JTextField nom, JTextField mat, JTextField edad,
+			JLabel label) {
+		super();
+		this.sp = sp;
+		this.id = id;
+		this.nom = nom;
+		this.mat = mat;
+		this.edad = edad;
+		this.label = label;
+	}
+	
+	
+
+	public LecturaSerial() {
+		super();
+	}
+	public void elej(int a) {
+		n=a;
+	}
+	public void serialEvent(SerialPortEvent spe) {
+		try {
+			msg=sp.readString(8);
+			ConectionDB db = new ConectionDB();
+			System.out.println("\n:  "+msg);
+			db.Elejir(2, msg, id, nom, mat, edad, label);
+			/*switch(n){
+			case 1:
+				db.Elejir(1, msg, id, nom, mat, edad, label);
+				break;
+			case 2:
+				db.Elejir(2, msg, id, nom, mat, edad, label);
+				break;
+			}*/
+			sp.closePort();
+		}catch(Exception ex) {
+			ex.printStackTrace();
+		}	
+	}
+	
+}

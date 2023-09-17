@@ -1,0 +1,105 @@
+package com.tesji.model;
+import java.awt.Image;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.IOException;
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import javax.swing.ImageIcon;
+import javax.swing.JLabel;
+import javax.swing.JOptionPane;
+import javax.swing.JTextField;
+import jssc.SerialPort;
+import jssc.SerialPortEvent;
+import jssc.SerialPortEventListener;
+import jssc.SerialPortException;
+import jssc.SerialPortList;
+
+public class Insertar {
+	public void Puertos(JTextField id, JTextField nom, JTextField mat, JTextField edad, String ruta) throws SerialPortException {
+		String puertos []= SerialPortList.getPortNames();
+		for(String n: puertos) {
+			System.out.println(n);
+		}
+		SerialPort sp = new SerialPort("/dev/ttyACM0");
+		
+		try {
+			sp.openPort();
+			sp.addEventListener(new Serial(sp, id, nom, mat, edad, ruta),SerialPort.MASK_RXCHAR);
+
+		}catch(Exception ex) {
+			ex.printStackTrace();
+			
+		}
+	}
+	
+	//Metodos de conexion a la base de datos
+	public void Elejir(String dato, JTextField id, JTextField nom, JTextField mat, JTextField edad, String ruta) 
+			throws SQLException {
+		Manager man = new Manager();
+		Connection conection=
+				DriverManager.getConnection("jdbc:mysql://localhost:3306/alumno","root","SusSand#12");
+
+			//AGREGAR
+			System.out.println();
+			File imagenFile = new File(ruta);
+			byte[] imagenBytes = new byte[(int) imagenFile.length()];
+
+			try (FileInputStream fis = new FileInputStream(imagenFile)) {
+			    fis.read(imagenBytes);
+			} catch (IOException e) {
+			    e.printStackTrace();
+			}
+			PreparedStatement prepared2 = 
+			conection.prepareStatement("insert into alumno values(?,?,?,?,?)");
+			//Para AGREGAR DATOS
+			id.setText(dato);
+			System.out.println(dato);
+			prepared2.setNString(1, dato);
+			prepared2.setNString(2, nom.getText());
+			prepared2.setBytes(3, imagenBytes);
+			prepared2.setNString(4, mat.getText());
+			prepared2.setNString(5, edad.getText());
+			prepared2.executeUpdate();
+			
+		//conection.close();
+	}
+	
+}
+
+class Serial implements SerialPortEventListener{
+	SerialPort sp;
+	String msg;
+	JTextField id, nom, mat, edad;String ruta;
+
+	public Serial(SerialPort sp, JTextField id, JTextField nom, JTextField mat, JTextField edad,
+			String ruta) {
+		super();
+		this.sp = sp;
+		this.id = id;
+		this.nom = nom;
+		this.mat = mat;
+		this.edad = edad;
+		this.ruta = ruta;
+	}
+	public Serial() {
+		super();
+	}
+	
+	public void serialEvent(SerialPortEvent spe) {
+		try {
+			msg=sp.readString(8);
+			ConectionDB db = new ConectionDB();
+			System.out.println("\n:  "+msg);
+			id.setText(msg);
+			sp.closePort();
+		}catch(Exception ex) {
+			ex.printStackTrace();
+		}	
+	}
+	
+}
+

@@ -1,0 +1,14 @@
+package prueba.main;
+
+import jssc.SerialPortList;
+
+public class JavaArduino{
+	public void Puertos() {
+		String puertos []= SerialPortList.getPortNames();
+		for(String n: puertos) {
+			System.out.println(n);
+		}
+		//SerialPort sp = new SerialPort
+	}
+	
+}

@@ -1,0 +1,7 @@
+package com.tesji.model;
+
+import jssc.SerialPortEventListener;
+
+public class Serial implements SerialPortEventListener{
+
+}

@@ -1,0 +1,26 @@
+package com.tesji.model;
+
+import jssc.SerialPort;
+import jssc.SerialPortEvent;
+import jssc.SerialPortEventListener;
+
+public class Serial implements SerialPortEventListener{
+	SerialPort sp;
+	SerialPort sp;
+	public LecturaSerial (SerialPort sp) {
+		this.sp =sp;
+	}
+	@Override
+	public void serialEvent(SerialPortEvent spe) {
+		try {
+			String msg="";
+			msg=sp.readString(8);
+			System.out.print("Recibiendo...");
+			System.out.println(msg);
+			sp.closePort();
+		}catch(Exception ex) {
+			ex.printStackTrace();
+		}
+		
+	}
+}

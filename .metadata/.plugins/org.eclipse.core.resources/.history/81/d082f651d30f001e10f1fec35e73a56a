@@ -1,0 +1,42 @@
+package prueba.main;
+
+import java.sql.*;
+import java.util.Scanner;
+
+public class DBConection {
+
+	public static void main(String[] args) {
+		// TODO Auto-generated method stub
+		try {
+			Scanner leer = new Scanner(System.in);
+			int n=0;
+			Connection conection=
+					DriverManager.getConnection("jdbc:mysql://localhost:3306/alumno","root","SusSand#12");
+			System.out.println("Conexion exitosa");
+			System.out.println("ELIGE QUE HACER");
+			n = leer.nextInt();
+			
+			switch(n) {
+				case 1:
+			PreparedStatement prepared = 
+					conection.prepareStatement("insert into alumno values(?,?)");
+			//Para AGREGAR DATOS
+			prepared.setNString(1, "Jenni");
+			prepared.setNString(2, "45998f4");
+			prepared.executeUpdate();
+			System.out.println("Datos insertados");
+				break;
+				case 2:
+			//PARA ACTUALIZAR DATOS
+			PreparedStatement prepared2 = 
+					conection.prepareStatement("UPDATE alumno SET uid=?, nombre=? WHERE uid=?");
+			prepared2.setString(1, "45998f4");
+			prepared2.setString(2, "Jenni");
+			prepared2.executeUpdate();			
+			break;
+			}
+		}catch(Exception e) {
+			System.out.println("Error en conexión: "+e);
+		}
+	}
+}

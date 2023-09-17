@@ -1,0 +1,33 @@
+package com.tesji.model;
+
+import jssc.SerialPort;
+import jssc.SerialPortException;
+import jssc.SerialPortList;
+
+public class ConectionAr {
+	public void Puertos() throws SerialPortException {
+		String puertos []= SerialPortList.getPortNames();
+		for(String n: puertos) {
+			System.out.println(n);
+		}
+		SerialPort sp = new SerialPort("/dev/ttyACM0");
+		
+		try {
+			sp.openPort();
+			sp.addEventListener(new LecturaSerial(sp),SerialPort.MASK_RXCHAR);
+			/*sp.setParams(SerialPort.BAUDRATE_9600,
+					SerialPort.DATABITS_8, 
+					SerialPort.STOPBITS_1,
+					SerialPort.PARITY_NONE);
+			Thread.sleep(1500);
+			while(true) {
+				System.out.println("Enviando...");
+				sp.writeString("Arqui");
+				Thread.sleep(5000);
+			}*/
+		}catch(Exception ex) {
+			ex.printStackTrace();
+			
+		}
+	}
+}

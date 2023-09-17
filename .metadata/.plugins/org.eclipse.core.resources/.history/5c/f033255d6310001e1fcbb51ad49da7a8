@@ -1,0 +1,28 @@
+package com.tesji.model;
+
+import jssc.SerialPort;
+import jssc.SerialPortEvent;
+import jssc.SerialPortEventListener;
+import jssc.SerialPortException;
+import jssc.SerialPortList;
+
+public class Insertar {
+	public void Puertos() throws SerialPortException {
+		String puertos []= SerialPortList.getPortNames();
+		for(String n: puertos) {
+			System.out.println(n);
+		}
+		SerialPort sp = new SerialPort("/dev/ttyACM0");
+		
+		try {
+			sp.openPort();
+			sp.addEventListener(new LecturaSerial(sp),SerialPort.MASK_RXCHAR);
+
+		}catch(Exception ex) {
+			ex.printStackTrace();
+			
+		}
+	}
+	
+}
+

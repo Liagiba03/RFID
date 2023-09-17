@@ -1,0 +1,46 @@
+package com.tesji.model;
+
+import jssc.SerialPort;
+import jssc.SerialPortEvent;
+import jssc.SerialPortEventListener;
+import jssc.SerialPortException;
+import jssc.SerialPortList;
+
+public class ConectionAr{
+	public void Puertos() throws SerialPortException {
+		String puertos []= SerialPortList.getPortNames();
+		for(String n: puertos) {
+			SerialPort sp = new SerialPort(n);
+		}
+		
+		
+		try {
+			sp.openPort();
+			sp.addEventListener(new LecturaSerial(sp),SerialPort.MASK_RXCHAR);
+		}catch(Exception ex) {
+			ex.printStackTrace();
+			
+		}
+	}
+}
+
+class LecturaSerial implements SerialPortEventListener{
+
+	SerialPort sp;
+	public LecturaSerial (SerialPort sp) {
+		this.sp =sp;
+	}
+	@Override
+	public void serialEvent(SerialPortEvent spe) {
+		try {
+			String msg="";
+			msg=sp.readString(8);
+			System.out.print("Recibiendo...");
+			System.out.println(msg);
+		}catch(Exception ex) {
+			ex.printStackTrace();
+		}
+		
+	}
+	
+}

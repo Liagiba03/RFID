@@ -1,0 +1,9 @@
+INDEX VERSION 1.134+/home/suseth/Documentos/Tesji/Semestre_4/PROYECTO_RFID/.metadata/.plugins/org.eclipse.jdt.core
+3860841564.index
+1865797976.index
+2312357822.index
+3232368726.index
+2748509805.index
+2949097923.index
+1596821246.index
+2981848195.index

@@ -1,0 +1,4 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<session version="1.0">
+<refactoring comment="Delete resource &apos;COnexion_Arduino&apos;" deleteContents="false" description="Delete resource &apos;COnexion_Arduino&apos;" element1="/COnexion_Arduino" flags="7" id="org.eclipse.ltk.core.refactoring.delete.resources" resources="1" stamp="1687323694181"/>
+</session>

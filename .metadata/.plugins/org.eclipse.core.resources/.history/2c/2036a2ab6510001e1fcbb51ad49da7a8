@@ -1,0 +1,61 @@
+package com.tesji.model;
+
+import javax.swing.JLabel;
+import javax.swing.JTextField;
+
+import jssc.SerialPort;
+import jssc.SerialPortEvent;
+import jssc.SerialPortEventListener;
+import jssc.SerialPortException;
+import jssc.SerialPortList;
+
+public class Insertar {
+	public void Puertos(JTextField id, JTextField nom, JTextField mat, JTextField edad, JLabel label) throws SerialPortException {
+		String puertos []= SerialPortList.getPortNames();
+		for(String n: puertos) {
+			System.out.println(n);
+		}
+		SerialPort sp = new SerialPort("/dev/ttyACM0");
+		
+		try {
+			sp.openPort();
+			sp.addEventListener(new Serial(sp),SerialPort.MASK_RXCHAR);
+
+		}catch(Exception ex) {
+			ex.printStackTrace();
+			
+		}
+	}
+	
+}
+
+class Serial implements SerialPortEventListener{
+	SerialPort sp;
+	String msg;
+
+	public LecturaSerial() {
+		super();
+	}
+	
+	public void serialEvent(SerialPortEvent spe) {
+		try {
+			msg=sp.readString(8);
+			ConectionDB db = new ConectionDB();
+			System.out.println("\n:  "+msg);
+			//db.Elejir(1, msg, id, nom, mat, edad, label);
+			/*switch(n){
+			case 1:
+				db.Elejir(1, msg, id, nom, mat, edad, label);
+				break;
+			case 2:
+				db.Elejir(2, msg, id, nom, mat, edad, label);
+				break;
+			}*/
+			sp.closePort();
+		}catch(Exception ex) {
+			ex.printStackTrace();
+		}	
+	}
+	
+}
+

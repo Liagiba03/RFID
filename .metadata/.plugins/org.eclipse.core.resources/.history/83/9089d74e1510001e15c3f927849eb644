@@ -1,0 +1,65 @@
+package com.tesji.model;
+
+import javax.swing.JTextField;
+
+import jssc.SerialPort;
+import jssc.SerialPortEvent;
+import jssc.SerialPortEventListener;
+import jssc.SerialPortException;
+import jssc.SerialPortList;
+
+public class ConectionAr{
+	public static String uidDevuelto;
+	
+	
+	public static String getUidDevuelto() {
+		return uidDevuelto;
+	}
+
+	public static void setUidDevuelto(String uidDevuelto) {
+		ConectionDB.uidDevuelto = uidDevuelto;
+	}
+	
+	
+	public void Puertos() throws SerialPortException {
+		String puertos []= SerialPortList.getPortNames();
+		for(String n: puertos) {
+			System.out.println(n);
+		}
+		SerialPort sp = new SerialPort("/dev/ttyACM0");
+		
+		try {
+			sp.openPort();
+			sp.addEventListener(new LecturaSerial(sp),SerialPort.MASK_RXCHAR);
+			LecturaSerial a = new LecturaSerial(sp);
+			uidDevuelto=a.getMsg();
+			System.out.print(a.getMsg());
+		}catch(Exception ex) {
+			ex.printStackTrace();
+			
+		}
+	}
+}
+class LecturaSerial implements SerialPortEventListener{
+
+	SerialPort sp;
+	String msg;
+	
+	public String getMsg() {
+		return msg;
+	}
+	
+	public LecturaSerial (SerialPort sp) {
+		this.sp =sp;
+	}
+	public void serialEvent(SerialPortEvent spe) {
+		try {
+			msg=sp.readString(8);
+			ConectionDB db = new ConectionDB();
+			db.Elejir(1, msg);
+		}catch(Exception ex) {
+			ex.printStackTrace();
+		}
+		
+	}
+}

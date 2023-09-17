@@ -1,0 +1,18 @@
+package prueba.main;
+
+import java.sql.*;
+
+public class DBConection {
+
+	public static void main(String[] args) {
+		// TODO Auto-generated method stub
+		try {
+			Connection conection=DriverManager.getConnection("jdbc:mysql://localhost:3306/alumno","root@localhost","SusSand#");
+			System.out.println("Conexion exitosa");
+		
+		
+		}catch(Exception e) {
+			System.out.println("Error en conexión: "+e);
+		}
+	}
+}

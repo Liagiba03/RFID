@@ -1,0 +1,14 @@
+package prueba.main;
+
+import java.sql.DriverManager;
+import sql.*;
+
+public class DBConection {
+
+	public static void main(String[] args) {
+		// TODO Auto-generated method stub
+		Connection connection= DriverManager.getConnection("jdbc:mysql://localhost:3306/alumno","root","SusSand#12");
+
+	}
+
+}

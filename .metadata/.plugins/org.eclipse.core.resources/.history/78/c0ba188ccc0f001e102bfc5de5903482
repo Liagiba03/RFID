@@ -1,0 +1,8 @@
+package prueba.main;
+
+public class main {
+	public static void main (String ar[]) {
+		System.out.print("HOLA MUNDO EN ECLIPSE DEDE UBUNTU");
+	}
+
+}

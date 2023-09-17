@@ -1,0 +1,171 @@
+package com.tesji.view;
+
+import java.awt.EventQueue;
+
+import javax.swing.JFrame;
+import javax.swing.JPanel;
+import javax.swing.border.EmptyBorder;
+import javax.swing.JTable;
+import javax.swing.JScrollBar;
+import javax.swing.JScrollPane;
+import javax.swing.table.DefaultTableModel;
+import javax.swing.JButton;
+import javax.swing.JTextArea;
+import javax.swing.JTextField;
+import javax.swing.JFileChooser;
+import java.awt.event.ActionListener;
+import java.awt.event.ActionEvent;
+import javax.swing.JLabel;
+
+public class Registrar extends JFrame {
+
+	private JPanel contentPane;
+	private JTable table;
+	DefaultTableModel model;
+	private JButton btnGuardar;
+	private JButton btnModificar;
+	private JButton btnElimiinar;
+	private JButton btnNuevo;
+	private JTextField textField;
+	private JTextField textField_1;
+	private JTextField textField_2;
+	private JTextField textField_3;
+
+	/**
+	 * Launch the application.
+	 */
+	public static void main(String[] args) {
+		EventQueue.invokeLater(new Runnable() {
+			public void run() {
+				try {
+					Registrar frame = new Registrar();
+					frame.setVisible(true);
+				} catch (Exception e) {
+					e.printStackTrace();
+				}
+			}
+		});
+	}
+
+	/**
+	 * Create the frame.
+	 */
+	public Registrar() {
+		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		setBounds(100, 100, 961, 706);
+		contentPane = new JPanel();
+		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
+
+		setContentPane(contentPane);
+		contentPane.setLayout(null);
+		
+		JPanel panel = new JPanel();
+		panel.setBounds(54, 85, 486, 312);
+		contentPane.add(panel);
+		panel.setLayout(null);
+		
+		JScrollPane scrollPane = new JScrollPane();
+		scrollPane.setBounds(0, 0, 486, 309);
+		panel.add(scrollPane);
+		
+		table = new JTable();
+		model = new DefaultTableModel();
+		table.setModel(model);
+		model.addColumn("UID");
+		model.addColumn("Nombre");
+		model.addColumn("Matricula");
+		model.addColumn("Edad");
+		model.addColumn("Foto");
+		scrollPane.setViewportView(table);
+		
+		btnGuardar = new JButton("Guardar");
+		btnGuardar.setBounds(117, 489, 117, 25);
+		contentPane.add(btnGuardar);
+		
+		btnModificar = new JButton("Modificar");
+		btnModificar.setBounds(270, 489, 117, 25);
+		contentPane.add(btnModificar);
+		
+		btnElimiinar = new JButton("Eliminar");
+		btnElimiinar.setBounds(423, 489, 117, 25);
+		contentPane.add(btnElimiinar);
+		
+		btnNuevo = new JButton("Nuevo");
+		btnNuevo.setBounds(592, 489, 117, 25);
+		contentPane.add(btnNuevo);
+		
+		JTextArea txtrUid = new JTextArea();
+		txtrUid.setText("UID");
+		txtrUid.setEditable(false);
+		txtrUid.setBounds(633, 198, 88, 26);
+		contentPane.add(txtrUid);
+		
+		textField = new JTextField();
+		textField.setEditable(false);
+		textField.setColumns(10);
+		textField.setBounds(747, 196, 125, 28);
+		contentPane.add(textField);
+		
+		JTextArea txtrNombre = new JTextArea();
+		txtrNombre.setText("Nombre");
+		txtrNombre.setEditable(false);
+		txtrNombre.setBounds(633, 248, 88, 26);
+		contentPane.add(txtrNombre);
+		
+		textField_1 = new JTextField();
+		textField_1.setEditable(false);
+		textField_1.setColumns(10);
+		textField_1.setBounds(747, 246, 125, 28);
+		contentPane.add(textField_1);
+		
+		JTextArea txtrUid_1_1 = new JTextArea();
+		txtrUid_1_1.setText("Matricula");
+		txtrUid_1_1.setEditable(false);
+		txtrUid_1_1.setBounds(633, 308, 88, 26);
+		contentPane.add(txtrUid_1_1);
+		
+		textField_2 = new JTextField();
+		textField_2.setEditable(false);
+		textField_2.setColumns(10);
+		textField_2.setBounds(747, 306, 125, 28);
+		contentPane.add(textField_2);
+		
+		JTextArea txtrUid_1_2 = new JTextArea();
+		txtrUid_1_2.setText("Edad");
+		txtrUid_1_2.setEditable(false);
+		txtrUid_1_2.setBounds(633, 371, 88, 26);
+		contentPane.add(txtrUid_1_2);
+		
+		textField_3 = new JTextField();
+		textField_3.setEditable(false);
+		textField_3.setColumns(10);
+		textField_3.setBounds(747, 369, 125, 28);
+		contentPane.add(textField_3);
+		
+		JLabel txtRuta = new JLabel("");
+		txtRuta.setBounds(747, 539, 70, 15);
+		contentPane.add(txtRuta);
+		
+		JButton btnFoto = new JButton("Foto...");
+		btnFoto.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent arg0) {
+				JFileChooser selectorArchivos = new JFileChooser();
+				selectorArchivos.setFileSelectionMode(JFileChooser.FILES_AND_DIRECTORIES);
+				// indica cual fue la accion de usuario sobre el jfilechooser
+				int resultado = selectorArchivos.showOpenDialog(btnFoto);
+				
+				String selectPath = selectorArchivos.getSelectedFile().getPath();
+				txtRuta.setText(selectPath);
+			}
+		});
+		btnFoto.setBounds(747, 489, 117, 25);
+		contentPane.add(btnFoto);
+		
+		
+	}
+	public void LlenarTabla() {
+		Object[] fila = new Object[5];
+		
+		
+	}
+}

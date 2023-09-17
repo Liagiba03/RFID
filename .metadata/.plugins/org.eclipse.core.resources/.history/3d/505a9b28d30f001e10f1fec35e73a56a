@@ -1,0 +1,26 @@
+package prueba.main;
+
+import java.sql.*;
+
+public class DBConection {
+
+	public static void main(String[] args) {
+		// TODO Auto-generated method stub
+		try {
+			Connection conection=
+					DriverManager.getConnection("jdbc:mysql://localhost:3306/alumno","root","SusSand#12");
+			System.out.println("Conexion exitosa");
+			PreparedStatement prepared = 
+					conection.prepareStatement("insert into alumno values(?,?)");
+			//Para AGREGAR DATOS
+			prepared.setNString(1, "Jenni");
+			prepared.setNString(2, "45998f4");
+			prepared.executeUpdate();
+			System.out.println("Datos insertados");
+		
+		
+		}catch(Exception e) {
+			System.out.println("Error en conexión: "+e);
+		}
+	}
+}
